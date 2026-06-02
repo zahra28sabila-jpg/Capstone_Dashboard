@@ -232,7 +232,7 @@ else:
     # Pra-pemrosesan Data Produk 
     df_pemasukan = df_filtered[df_filtered['type'] == 'pemasukan']
     biru_jenuh_custom = ["#2362A1","#2E71B3","#4C8ECB","#579EE0","#7BB9F2"]
-    oranye_jenuh_custom = ["FF7B00","#FF8D21", "#FFA652" "#FFB76B", "#FFCD90"]
+    oranye_jenuh_custom = ["FF7B00","#FF8D21", "#FFA652","#FFB76B", "#FFCD90"]
     
     if df_pemasukan.empty:
         with col_r2_1:
