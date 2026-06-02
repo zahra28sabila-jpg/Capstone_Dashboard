@@ -201,10 +201,53 @@ else:
 
     # BARIS 3
     st.markdown("---")
-    col_b3_1, col_b3_2, col_b3_3 = st.columns(3)
+    # col_b3_1, col_b3_2, col_b3_3 = st.columns(3)
     
-    # Kotak Grafik 2
-    with col_b3_1:
+    # # Kotak Grafik 2
+    # with col_b3_1:
+    #     with st.container(border=True):
+    #         st.markdown("##### Pemasukan vs Pengeluaran")
+    #         df_ratio_trend = pd.melt(df_trend, id_vars=['Periode'], value_vars=['Pemasukan', 'Pengeluaran'], var_name='Tipe', value_name='Nominal')
+    #         fig_ratio = px.bar(
+    #             df_ratio_trend, x='Periode', y='Nominal', color='Tipe', barmode='group',
+    #             color_discrete_map={'Pemasukan': '#2ecc71', 'Pengeluaran': '#e74c3c'},
+    #             labels={'Nominal': 'Total (Rp)', 'Periode': 'Waktu'}
+    #         )
+    #         fig_ratio.update_layout(height=250, legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1), margin=dict(t=10, b=10, l=10, r=10))
+    #         st.plotly_chart(fig_ratio, use_container_width=True)
+
+    # # Kotak Grafik 3: Pie Chart Kategori Produk
+    # with col_b3_2:
+    #     with st.container(border=True):
+    #         st.markdown("##### Kategori Produk Terlaku")
+    #         df_kat_count = df_filtered.groupby('kategori').size().reset_index(name='banyak_transaksi')
+    #         fig_kat = px.pie(df_kat_count, values='banyak_transaksi', names='kategori')
+    #         fig_kat.update_layout(height=250, margin=dict(t=10, b=10, l=10, r=10))
+    #         st.plotly_chart(fig_kat, use_container_width=True)
+
+    # # Kotak Grafik 4: Top 5 Produk Terlaku 
+    # with col_b3_3:
+    #     with st.container(border=True):
+    #         st.markdown("##### Top 5 Produk Terlaku")
+    #         df_pemasukan = df_filtered[df_filtered['type'] == 'pemasukan']
+    #         if df_pemasukan.empty:
+    #             st.caption("Tidak ada data pemasukan")
+    #         else:
+    #             df_prod_count = df_pemasukan.groupby('Nama_Produk').size().reset_index(name='jumlah_terjual')
+    #             df_top5 = df_prod_count.nlargest(5, 'jumlah_terjual').sort_values(by='jumlah_terjual', ascending=True)
+                
+    #             fig_prod = px.bar(
+    #                 df_top5, x='jumlah_terjual', y='Nama_Produk', orientation='h',
+    #                 labels={'jumlah_terjual': 'Total Terjual', 'Nama_Produk': 'Nama Produk'},
+    #                 color='jumlah_terjual', color_continuous_scale='Viridis'
+    #             )
+    #             fig_prod.update_layout(height=250, showlegend=False, margin=dict(t=10, b=10, l=10, r=10))
+    #             st.plotly_chart(fig_prod, use_container_width=True)
+# BARIS 1
+    col_r1_1, col_r1_2 = st.columns(2)
+
+#Kotak Grafik 2: Pemasukan vs Pengeluaran
+    with col_r1_1:
         with st.container(border=True):
             st.markdown("##### Pemasukan vs Pengeluaran")
             df_ratio_trend = pd.melt(df_trend, id_vars=['Periode'], value_vars=['Pemasukan', 'Pengeluaran'], var_name='Tipe', value_name='Nominal')
@@ -215,25 +258,39 @@ else:
             )
             fig_ratio.update_layout(height=250, legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1), margin=dict(t=10, b=10, l=10, r=10))
             st.plotly_chart(fig_ratio, use_container_width=True)
-
+    
     # Kotak Grafik 3: Pie Chart Kategori Produk
-    with col_b3_2:
+    with col_r1_2:
         with st.container(border=True):
             st.markdown("##### Kategori Produk Terlaku")
             df_kat_count = df_filtered.groupby('kategori').size().reset_index(name='banyak_transaksi')
             fig_kat = px.pie(df_kat_count, values='banyak_transaksi', names='kategori')
             fig_kat.update_layout(height=250, margin=dict(t=10, b=10, l=10, r=10))
             st.plotly_chart(fig_kat, use_container_width=True)
-
-    # Kotak Grafik 4: Top 5 Produk Terlaku 
-    with col_b3_3:
-        with st.container(border=True):
-            st.markdown("##### Top 5 Produk Terlaku")
-            df_pemasukan = df_filtered[df_filtered['type'] == 'pemasukan']
-            if df_pemasukan.empty:
+    
+    # BARIS 2: Produk Terlaku & Kurang Laku 
+    col_r2_1, col_r2_2 = st.columns(2)
+    
+    # Pra-pemrosesan Data Produk 
+    df_pemasukan = df_filtered[df_filtered['type'] == 'pemasukan']
+    
+    if df_pemasukan.empty:
+        with col_r2_1:
+            with st.container(border=True):
+                st.markdown("##### Top 5 Produk Terlaku")
                 st.caption("Tidak ada data pemasukan")
-            else:
-                df_prod_count = df_pemasukan.groupby('Nama_Produk').size().reset_index(name='jumlah_terjual')
+        with col_r2_2:
+            with st.container(border=True):
+                st.markdown("##### 5 Produk Kurang Laku")
+                st.caption("Tidak ada data pemasukan")
+    else:
+        # Grouping data produk berdasarkan total terjual
+        df_prod_count = df_pemasukan.groupby('Nama_Produk').size().reset_index(name='jumlah_terjual')
+        
+        # Kotak Grafik 4: Top 5 Produk Terlaku 
+        with col_r2_1:
+            with st.container(border=True):
+                st.markdown("##### Top 5 Produk Terlaku")
                 df_top5 = df_prod_count.nlargest(5, 'jumlah_terjual').sort_values(by='jumlah_terjual', ascending=True)
                 
                 fig_prod = px.bar(
@@ -241,8 +298,24 @@ else:
                     labels={'jumlah_terjual': 'Total Terjual', 'Nama_Produk': 'Nama Produk'},
                     color='jumlah_terjual', color_continuous_scale='Viridis'
                 )
-                fig_prod.update_layout(height=250, showlegend=False, margin=dict(t=10, b=10, l=10, r=10))
+                fig_prod.update_layout(height=250, showlegend=False, coloraxis_showscale=False, margin=dict(t=10, b=10, l=10, r=10))
                 st.plotly_chart(fig_prod, use_container_width=True)
+    
+        # Kotak Grafik 5: Bottom 5 Produk Terlaku 
+        with col_r2_2:
+            with st.container(border=True):
+                st.markdown("##### 5 Produk Kurang Laku")
+                # Menggunakan nsmallest untuk mencari 5 produk paling sedikit terjual
+                # Di-sort ascending=False supaya produk yang paling sedikit berada di posisi bawah chart horizontal
+                df_bottom5 = df_prod_count.nsmallest(5, 'jumlah_terjual').sort_values(by='jumlah_terjual', ascending=False)
+                
+                fig_bottom = px.bar(
+                    df_bottom5, x='jumlah_terjual', y='Nama_Produk', orientation='h',
+                    labels={'jumlah_terjual': 'Total Terjual', 'Nama_Produk': 'Nama Produk'},
+                    color='jumlah_terjual', color_continuous_scale='Plasma' 
+                )
+                fig_bottom.update_layout(height=250, showlegend=False, coloraxis_showscale=False, margin=dict(t=10, b=10, l=10, r=10))
+                st.plotly_chart(fig_bottom, use_container_width=True)
 
     # --- BARIS 4: ANALISIS JAM SIBUK (PEAK HOURS) 
     st.markdown("---")
