@@ -231,6 +231,8 @@ else:
     
     # Pra-pemrosesan Data Produk 
     df_pemasukan = df_filtered[df_filtered['type'] == 'pemasukan']
+    biru_jenuh_custom = ['#031d44', '#04395e', '#005f73', '#0a9396', '#00b4d8']
+    oranye_jenuh_custom = ['#5e2c04', '#7f4f24', '#a66c3a', '#d95d39', '#f28482']
     
     if df_pemasukan.empty:
         with col_r2_1:
@@ -254,7 +256,7 @@ else:
                 fig_prod = px.bar(
                     df_top5, x='jumlah_terjual', y='Nama_Produk', orientation='h',
                     labels={'jumlah_terjual': 'Total Terjual', 'Nama_Produk': 'Nama Produk'},
-                    color='jumlah_terjual', color_continuous_scale='Blues',
+                    color='jumlah_terjual', color_continuous_scale=biru_jenuh_custom,
                 )
                 fig_prod.update_layout(height=250, showlegend=False, coloraxis_showscale=False, margin=dict(t=10, b=10, l=10, r=10))
                 st.plotly_chart(fig_prod, use_container_width=True)
@@ -270,7 +272,7 @@ else:
                 fig_bottom = px.bar(
                     df_bottom5, x='jumlah_terjual', y='Nama_Produk', orientation='h',
                     labels={'jumlah_terjual': 'Total Terjual', 'Nama_Produk': 'Nama Produk'},
-                    color='jumlah_terjual',color_continuous_scale='Oranges'
+                    color='jumlah_terjual',color_continuous_scale=oranye_jenuh_custom
                 )
                 fig_bottom.update_layout(height=250, showlegend=False, coloraxis_showscale=False, margin=dict(t=10, b=10, l=10, r=10))
                 st.plotly_chart(fig_bottom, use_container_width=True)
